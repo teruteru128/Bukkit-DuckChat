@@ -64,7 +64,7 @@
     <!-- Vault -->
     <repository>
       <id>milkbowl-repo</id>
-      <url>http://nexus.hc.to/content/repositories/pub_releases/</url>
+      <url>https://nexus.hc.to/content/repositories/pub_releases/</url>
     </repository>
   </repositories>
   <distributionManagement>

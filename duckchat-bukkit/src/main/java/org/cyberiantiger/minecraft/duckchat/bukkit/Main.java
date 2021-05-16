@@ -239,9 +239,6 @@ public class Main extends JavaPlugin implements Listener {
         this.messages.clear();
         try {
             Yaml languageLoader = new Yaml();
-            // URL->URI->Path->Readerと変換する方法があるがjarにパッケージ化して実行すると失敗する
-            // There is a way to convert from URL-> URI-> Path-> Reader, but it fails when packaged in jar and executed.
-            // Files.newBufferedReader(Paths.get(getClass().getClassLoader().getResource(LANGUAGE).toURI()));
             Map<String, String> messages = (Map<String, String>) languageLoader.load( new InputStreamReader( new BufferedInputStream( getClass().getClassLoader().getResourceAsStream(LANGUAGE)), Charsets.UTF_8));
             for (Map.Entry<String,String> e : messages.entrySet()) {
                 this.messages.put(e.getKey(), e.getValue().replace('&', ChatColor.COLOR_CHAR));

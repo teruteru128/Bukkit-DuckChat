@@ -66,8 +66,8 @@ import org.cyberiantiger.minecraft.duckchat.bukkit.message.ServerCreateData;
 import org.cyberiantiger.minecraft.duckchat.bukkit.state.ChatChannelMetadata;
 import org.cyberiantiger.minecraft.duckchat.bukkit.state.StateManager;
 import org.jgroups.Address;
-import org.jgroups.Channel;
 import org.jgroups.JChannel;
+import org.jgroups.util.NameCache;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.CustomClassLoaderConstructor;
 import org.yaml.snakeyaml.error.YAMLException;
@@ -87,7 +87,7 @@ public class Main extends JavaPlugin implements Listener {
     private final SpamManager spamManager = new SpamManager();
 
     private Config config;
-    private Channel channel;
+    private JChannel channel;
     /*
     private String clusterName;
     private boolean useUUIDs;
@@ -134,7 +134,9 @@ public class Main extends JavaPlugin implements Listener {
         String nodename = config.getNodeName() == null ? getServer().getName() : config.getNodeName();
         if (config.getNetwork() != null) {
             File networkConfig = new File(getDataFolder(), config.getNetwork());
-            channel = new JChannel(networkConfig);
+            try (InputStream in = Files.newInputStream(networkConfig.toPath())) {
+                channel = new JChannel(in);
+            }
         } else {
             channel = new JChannel();
         }
@@ -628,6 +630,6 @@ public class Main extends JavaPlugin implements Listener {
     }
 
     public String getNodeName(Address addr) {
-        return channel.getName(addr);
+        return NameCache.get(addr);
     }
 }

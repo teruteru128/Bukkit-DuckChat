@@ -7,7 +7,9 @@ package org.cyberiantiger.minecraft.duckchat.core;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import java.io.File;
+import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -18,12 +20,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.cyberiantiger.minecraft.duckchat.core.state.State;
 import org.cyberiantiger.minecraft.duckchat.core.state.State.StateProvider;
-import org.cyberiantiger.minecraft.duckchat.core.state.State.StateUpdater;
 import org.jgroups.Address;
 import org.jgroups.JChannel;
 import org.jgroups.Message;
 import org.jgroups.ReceiverAdapter;
 import org.jgroups.View;
+import org.jgroups.util.NameCache;
 
 /**
  *
@@ -128,7 +130,13 @@ public final class Network {
         for (StateProvider<?,?> p : ServiceLoader.load(StateProvider.class)) {
             stateProviders.put(p.getStateClass(), p);
         }
-        channelImpl = config == null ? new JChannel() : new JChannel(config);
+        if (config == null) {
+            channelImpl = new JChannel();
+        } else {
+            try (InputStream in = Files.newInputStream(config.toPath())) {
+                channelImpl = new JChannel(in);
+            }
+        }
         channelImpl.setName(node);
         channelImpl.setDiscardOwnMessages(true);
         if (debug) {

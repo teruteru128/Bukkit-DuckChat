@@ -153,7 +153,7 @@ public class Main extends JavaPlugin implements Listener {
 
         // サーバー起動を広告
         sendServerCreate();
-        
+
         // Register our players.
         for (Player player : getServer().getOnlinePlayers()) {
             sendMemberCreate(player);
@@ -175,9 +175,11 @@ public class Main extends JavaPlugin implements Listener {
             String permission = channelConfig.getPermission();
             flags.set(ChatChannel.FLAG_LOCAL_AUTO_JOIN, channelConfig.isLocalAutoJoin());
             flags.set(ChatChannel.FLAG_GLOBAL_AUTO_JOIN, channelConfig.isGlobalAutoJoin());
-            sendData(new ChannelCreateData(addr, name, messageFormat, actionFormat, flags, permission, channelConfig.getSpamWindow(), channelConfig.getSpamThreshold(), channelConfig.getRepeatWindow(), channelConfig.getRepeatThreshold()));
+            sendData(new ChannelCreateData(addr, name, messageFormat, actionFormat, flags, permission,
+                    channelConfig.getSpamWindow(), channelConfig.getSpamThreshold(), channelConfig.getRepeatWindow(),
+                    channelConfig.getRepeatThreshold()));
         }
-        
+
     }
 
     // Net
@@ -227,22 +229,25 @@ public class Main extends JavaPlugin implements Listener {
         copyDefault(CONFIG, getConfigFile());
         copyDefault(LANGUAGE, getLanguageFile());
     }
-    
+
     private void loadConfig() {
         config = new Config();
         try {
             Yaml configLoader = new Yaml(new CustomClassLoaderConstructor(Config.class, getClass().getClassLoader()));
             configLoader.setBeanAccess(BeanAccess.FIELD);
-            config = configLoader.loadAs(Files.newBufferedReader(getConfigFile().toPath(), Charsets.UTF_8), Config.class);
-        } catch (IOException|YAMLException ex) {
+            config = configLoader.loadAs(Files.newBufferedReader(getConfigFile().toPath(), Charsets.UTF_8),
+                    Config.class);
+        } catch (IOException | YAMLException ex) {
             getLogger().log(Level.SEVERE, "Error loading config.yml", ex);
             getLogger().severe("Your config.yml has fatal errors, using defaults.");
         }
         this.messages.clear();
         try {
             Yaml languageLoader = new Yaml();
-            Map<String, String> messages = (Map<String, String>) languageLoader.load( new InputStreamReader( new BufferedInputStream( getClass().getClassLoader().getResourceAsStream(LANGUAGE)), Charsets.UTF_8));
-            for (Map.Entry<String,String> e : messages.entrySet()) {
+            Map<String, String> messages = (Map<String, String>) languageLoader.load(new InputStreamReader(
+                    new BufferedInputStream(getClass().getClassLoader().getResourceAsStream(LANGUAGE)),
+                    Charsets.UTF_8));
+            for (Map.Entry<String, String> e : messages.entrySet()) {
                 this.messages.put(e.getKey(), e.getValue().replace('&', ChatColor.COLOR_CHAR));
             }
             this.messages.putAll(messages);
@@ -251,11 +256,12 @@ public class Main extends JavaPlugin implements Listener {
         }
         try {
             Yaml languageLoader = new Yaml();
-            Map<String, String> messages = (Map<String, String>) languageLoader.load(Files.newBufferedReader(getLanguageFile().toPath(), Charsets.UTF_8));
-            for (Map.Entry<String,String> e : messages.entrySet()) {
+            Map<String, String> messages = (Map<String, String>) languageLoader
+                    .load(Files.newBufferedReader(getLanguageFile().toPath(), Charsets.UTF_8));
+            for (Map.Entry<String, String> e : messages.entrySet()) {
                 this.messages.put(e.getKey(), e.getValue().replace('&', ChatColor.COLOR_CHAR));
             }
-        } catch (IOException|YAMLException ex) {
+        } catch (IOException | YAMLException ex) {
             getLogger().log(Level.SEVERE, "Error loading language.yml", ex);
             getLogger().severe("Your language.yml has fatal errors, using defaults.");
         }
@@ -360,18 +366,18 @@ public class Main extends JavaPlugin implements Listener {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         // Check for label matches.
-        for (Map.Entry<String,SubCommand<Main>> e : subcommands.entrySet()) {
-                if(label.equalsIgnoreCase(e.getKey())) {
-                    executeCommand(sender, e.getValue(), label, args);
-                    return true;
-                }
+        for (Map.Entry<String, SubCommand<Main>> e : subcommands.entrySet()) {
+            if (label.equalsIgnoreCase(e.getKey())) {
+                executeCommand(sender, e.getValue(), label, args);
+                return true;
+            }
         }
         // Check for second argument matches.
         if (args.length >= 1) {
-            for (Map.Entry<String,SubCommand<Main>> e : subcommands.entrySet()) {
+            for (Map.Entry<String, SubCommand<Main>> e : subcommands.entrySet()) {
                 if (e.getKey().equalsIgnoreCase(args[0])) {
                     label += " " + args[0];
-                    String[] newArgs = new String[args.length-1];
+                    String[] newArgs = new String[args.length - 1];
                     System.arraycopy(args, 1, newArgs, 0, newArgs.length);
                     executeCommand(sender, e.getValue(), label, newArgs);
                     return true;
@@ -383,11 +389,11 @@ public class Main extends JavaPlugin implements Listener {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
-        for (Map.Entry<String,SubCommand<Main>> e : subcommands.entrySet()) {
-            if(label.equalsIgnoreCase(e.getKey())) {
+        for (Map.Entry<String, SubCommand<Main>> e : subcommands.entrySet()) {
+            if (label.equalsIgnoreCase(e.getKey())) {
                 return e.getValue().onTabComplete(sender, args);
             } else if (args.length >= 1 && e.getKey().equalsIgnoreCase(args[0])) {
-                String[] newArgs = new String[args.length-1];
+                String[] newArgs = new String[args.length - 1];
                 System.arraycopy(args, 1, newArgs, 0, newArgs.length);
                 return e.getValue().onTabComplete(sender, newArgs);
             }
@@ -414,7 +420,7 @@ public class Main extends JavaPlugin implements Listener {
         }
         StringBuilder result = new StringBuilder();
         boolean special = false;
-        for (int i = 0 ; i < message.length(); i++) {
+        for (int i = 0; i < message.length(); i++) {
             char ch = message.charAt(i);
             if (special) {
                 if ((allowColor && COLOR_CODES.indexOf(ch) != -1) || (allowFormat && FORMAT_CODES.indexOf(ch) != -1)) {
@@ -501,7 +507,7 @@ public class Main extends JavaPlugin implements Listener {
 
     public void sendChannelAction(CommandSender sender, String channelName, String action) {
         String format;
-        if (!getState().isChannelMember(getCommandSenderManager().getIdentifier(sender),channelName)) {
+        if (!getState().isChannelMember(getCommandSenderManager().getIdentifier(sender), channelName)) {
             getCommandSenderManager().sendMessage(sender, translate("chat.nochannel"));
             return;
         }
@@ -541,7 +547,7 @@ public class Main extends JavaPlugin implements Listener {
     public void sendChannelMessage(CommandSender sender, String message) {
         String channel = getCommandSenderManager().getCurrentChannel(sender);
         if (channel == null) {
-            getCommandSenderManager().sendMessage(sender,translate("chat.nochannel"));
+            getCommandSenderManager().sendMessage(sender, translate("chat.nochannel"));
             return;
         }
         sendChannelMessage(sender, channel, message);
@@ -549,7 +555,7 @@ public class Main extends JavaPlugin implements Listener {
 
     public void sendChannelMessage(CommandSender sender, String channelName, String message) {
         String format;
-        if (!getState().isChannelMember(getCommandSenderManager().getIdentifier(sender),channelName)) {
+        if (!getState().isChannelMember(getCommandSenderManager().getIdentifier(sender), channelName)) {
             getCommandSenderManager().sendMessage(sender, translate("chat.nochannel"));
             return;
         }

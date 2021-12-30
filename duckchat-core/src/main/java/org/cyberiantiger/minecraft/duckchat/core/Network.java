@@ -4,8 +4,6 @@
  */
 package org.cyberiantiger.minecraft.duckchat.core;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Method;
@@ -18,6 +16,10 @@ import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+
 import org.cyberiantiger.minecraft.duckchat.core.state.State;
 import org.cyberiantiger.minecraft.duckchat.core.state.State.StateProvider;
 import org.jgroups.Address;
@@ -38,44 +40,40 @@ public final class Network {
     private final String node;
     private final File config;
     private final boolean debug;
-    private final BiMap<String,Address> addresses = HashBiMap.create();
+    private final BiMap<String, Address> addresses = HashBiMap.create();
     private final JChannel channelImpl;
 
-    private final Map<Class<? extends State>, State.StateProvider> stateProviders =
-            new HashMap<Class<? extends State>, State.StateProvider>();
-    private final Map<Key<? extends State>, State> state =
-            new HashMap<Key<? extends State>, State>();
-    private final Map<Key<? extends State>, State.StateUpdater> stateUpdater =
-            new HashMap<Key<? extends State>, State.StateUpdater>();
+    private final Map<Class<? extends State>, State.StateProvider> stateProviders = new HashMap<Class<? extends State>, State.StateProvider>();
+    private final Map<Key<? extends State>, State> state = new HashMap<Key<? extends State>, State>();
+    private final Map<Key<? extends State>, State.StateUpdater> stateUpdater = new HashMap<Key<? extends State>, State.StateUpdater>();
 
     private final ReceiverAdapter receiver = new ReceiverAdapter() {
         @Override
         public void viewAccepted(View view) {
-            BiMap<String,Address> added = HashBiMap.create();
-            BiMap<String,Address> removed = HashBiMap.create();
+            BiMap<String, Address> added = HashBiMap.create();
+            BiMap<String, Address> removed = HashBiMap.create();
 
-            BiMap<Address,String> current = addresses.inverse();
+            BiMap<Address, String> current = addresses.inverse();
             Set<Address> members = new HashSet<Address>(view.getMembers());
-            
-            Iterator<Map.Entry<Address,String>> itr = current.entrySet().iterator();
+
+            Iterator<Map.Entry<Address, String>> itr = current.entrySet().iterator();
             while (itr.hasNext()) {
-                Map.Entry<Address,String> e = itr.next();
+                Map.Entry<Address, String> e = itr.next();
                 if (!members.contains(e.getKey())) {
                     itr.remove();
                     removed.put(e.getValue(), e.getKey());
                 }
             }
-            
+
             for (Address addr : members) {
                 if (!current.containsKey(addr)) {
                     String name = NameCache.get(addr);
                     added.put(name, addr);
-                    current.put(addr,name);
+                    current.put(addr, name);
                 }
             }
 
-            log.log(Level.FINE, "View from {2} changed, added={0}, removed={1}", new Object[]{added, removed, node});
-
+            log.log(Level.FINE, "View from {2} changed, added={0}, removed={1}", new Object[] { added, removed, node });
 
         }
 
@@ -85,24 +83,24 @@ public final class Network {
             String msgType = (String) data[0];
             if ("state".equals(msgType)) {
                 updateState(msg.getSrc(), (State) data[1]);
-            } else if("staterpc".equals(msgType)) {
+            } else if ("staterpc".equals(msgType)) {
                 try {
                     Address src = msg.getSrc();
-                    Class<? extends State> stateClass = (Class<? extends State>) Class.forName((String)data[1]);
+                    Class<? extends State> stateClass = (Class<? extends State>) Class.forName((String) data[1]);
                     MethodDescriptor descriptor = (MethodDescriptor) data[2];
                     Method method = descriptor.getMethod();
                     Object[] parameters = (Object[]) data[3];
                     updateStateRPC(src, stateClass, method, parameters);
                 } catch (ClassNotFoundException ex) {
                 }
-                
+
             }
         }
-        
+
     };
 
     protected <T extends State> void updateStateRPC(Address owner, Class<T> type, Method method, Object[] parameters) {
-        
+
     }
 
     protected void updateState(Address master, State data) {
@@ -127,7 +125,7 @@ public final class Network {
         this.node = node;
         this.debug = debug;
         this.config = config;
-        for (StateProvider<?,?> p : ServiceLoader.load(StateProvider.class)) {
+        for (StateProvider<?, ?> p : ServiceLoader.load(StateProvider.class)) {
             stateProviders.put(p.getStateClass(), p);
         }
         if (config == null) {

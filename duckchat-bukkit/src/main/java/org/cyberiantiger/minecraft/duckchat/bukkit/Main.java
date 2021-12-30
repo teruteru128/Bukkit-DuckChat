@@ -630,6 +630,6 @@ public class Main extends JavaPlugin implements Listener {
     }
 
     public String getNodeName(Address addr) {
-        return channel.getName(addr);
+        return NameCache.get(addr);
     }
 }

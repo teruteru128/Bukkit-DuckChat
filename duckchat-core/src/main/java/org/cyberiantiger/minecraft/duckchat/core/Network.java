@@ -68,7 +68,7 @@ public final class Network {
             
             for (Address addr : members) {
                 if (!current.containsKey(addr)) {
-                    String name = channelImpl.getName(addr);
+                    String name = NameCache.get(addr);
                     added.put(name, addr);
                     current.put(addr,name);
                 }

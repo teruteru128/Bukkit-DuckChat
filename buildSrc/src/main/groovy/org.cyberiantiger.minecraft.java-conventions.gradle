@@ -19,11 +19,11 @@ repositories {
     }
 
     maven {
-        url = uri('https://nexus.hc.to/content/repositories/pub_releases/')
+        url = uri('https://hub.spigotmc.org/nexus/content/repositories/sonatype-nexus-snapshots/')
     }
 
     maven {
-        url = uri('https://repo.maven.apache.org/maven2/')
+        url = uri('https://nexus.hc.to/content/repositories/pub_releases/')
     }
 
     maven {

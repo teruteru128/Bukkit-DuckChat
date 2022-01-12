@@ -3,6 +3,8 @@
  */
 
 plugins {
+    // To generate a fat jar, you need to run './gradlew shadowJar' or './gradlew duckchat-bukkit:shadowJar' .
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
     id 'org.cyberiantiger.minecraft.java-conventions'
 }
 
@@ -11,6 +13,10 @@ dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.9-R0.1-SNAPSHOT'
     compileOnly 'net.milkbowl.vault:Vault:1.7.3'
     compileOnly project(':duckchat-core')
+}
+
+shadowJar {
+    archiveClassifier = 'shade'
 }
 
 description = 'duckchat-bukkit'

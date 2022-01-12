@@ -47,14 +47,6 @@
     </plugins>
   </build>
   <dependencies>
-    <!--
-    <dependency>
-      <groupId>org.bukkit</groupId>
-      <artifactId>bukkit</artifactId>
-      <version>1.9-R0.1-SNAPSHOT</version>
-      <scope>provided</scope>
-    </dependency>
-    -->
     <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot-api</artifactId>
@@ -72,12 +64,10 @@
       <artifactId>jgroups</artifactId>
       <version>4.2.18.Final</version>
     </dependency>
-<!--
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>duckchat-core</artifactId>
       <version>${project.version}</version>
     </dependency>
--->
   </dependencies>
 </project>

@@ -9,7 +9,7 @@ plugins {
 dependencies {
     implementation 'org.schwering:irclib:1.10'
     compileOnly 'org.spigotmc:spigot-api:1.9-R0.1-SNAPSHOT'
-    compileOnly project(':duckchat-bukkit')
+    implementation project(':duckchat-bukkit')
 }
 
 description = 'duckchat-irc'

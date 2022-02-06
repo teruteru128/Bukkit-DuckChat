@@ -21,14 +21,14 @@ import org.cyberiantiger.minecraft.duckchat.bukkit.message.PluginMessageData;
 import org.cyberiantiger.minecraft.duckchat.bukkit.message.ServerCreateData;
 import org.jgroups.Address;
 import org.jgroups.Message;
-import org.jgroups.ReceiverAdapter;
+import org.jgroups.Receiver;
 import org.jgroups.View;
 
 /**
  *
  * @author antony
  */
-public class DuckReceiver extends ReceiverAdapter {
+public class DuckReceiver implements Receiver {
 
     private final StateManager state;
 
@@ -109,7 +109,6 @@ public class DuckReceiver extends ReceiverAdapter {
         state.onViewUpdated(view.getMembers());
     }
 
-    @Override
     public void suspect(Address addr) {
         state.onSuspect(addr);
     }

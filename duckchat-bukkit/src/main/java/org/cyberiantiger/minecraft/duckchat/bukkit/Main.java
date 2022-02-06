@@ -26,6 +26,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -78,6 +81,7 @@ import org.yaml.snakeyaml.introspector.BeanAccess;
  * @author antony
  */
 public class Main extends JavaPlugin implements Listener {
+    private static final Logger logger = Bukkit.getLogger();
     private static final String CONFIG = "config.yml";
     private static final String LANGUAGE = "language.yml";
 
@@ -131,6 +135,7 @@ public class Main extends JavaPlugin implements Listener {
         // XXX: Setting stuff globally is bad
         System.setProperty("java.net.preferIPv4Stack", String.valueOf(config.isUseIPv4()));
         System.setProperty("jgroups.bind_addr", config.getBindAddress());
+        logger.info(String.format("bind_addr is : %s", config.getBindAddress()));
         String nodename = config.getNodeName() == null ? getServer().getName() : config.getNodeName();
         if (config.getNetwork() != null) {
             File networkConfig = new File(getDataFolder(), config.getNetwork());

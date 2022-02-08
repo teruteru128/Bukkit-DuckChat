@@ -129,6 +129,7 @@ public class Main extends JavaPlugin implements Listener {
 
     private void connect() throws Exception {
         // XXX: Setting stuff globally is bad
+        // http://www.jgroups.org/manual5/index.html#SystemProperties
         System.setProperty("java.net.preferIPv4Stack", String.valueOf(config.isUseIPv4()));
         System.setProperty("jgroups.bind_addr", config.getBindAddress());
         String nodename = config.getNodeName() == null ? getServer().getName() : config.getNodeName();

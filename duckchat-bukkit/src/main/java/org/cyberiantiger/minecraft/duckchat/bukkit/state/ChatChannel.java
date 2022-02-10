@@ -83,7 +83,6 @@ public class ChatChannel implements Serializable {
 
     private void writeObject(ObjectOutputStream out)
             throws IOException {
-        out.defaultWriteObject();
         ByteArrayDataOutputStream dos = new ByteArrayDataOutputStream();
         Util.writeObject(owner, dos);
         byte[] buffer =dos.buffer();
@@ -96,7 +95,6 @@ public class ChatChannel implements Serializable {
 
     private void readObject(ObjectInputStream in)
             throws IOException, ClassNotFoundException {
-        in.defaultReadObject();
         int len = in.readInt();
         byte[] buffer = new byte[len];
         in.read(buffer);

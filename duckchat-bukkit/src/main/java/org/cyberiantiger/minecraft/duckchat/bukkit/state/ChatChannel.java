@@ -4,12 +4,18 @@
  */
 package org.cyberiantiger.minecraft.duckchat.bukkit.state;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.BitSet;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import org.jgroups.Address;
+import org.jgroups.util.ByteArrayDataInputStream;
+import org.jgroups.util.ByteArrayDataOutputStream;
+import org.jgroups.util.Util;
 
 /**
  *
@@ -19,9 +25,9 @@ public class ChatChannel implements Serializable {
     public static final int FLAG_LOCAL_AUTO_JOIN = 0;
     public static final int FLAG_GLOBAL_AUTO_JOIN = 1;
 
-    private final Address owner;
-    private final String name;
-    private final Map<String, Member> members = new HashMap<String, Member>();
+    private Address owner;
+    private String name;
+    private Map<String, Member> members = new HashMap<String, Member>();
     private ChatChannelMetadata metadata;
 
     public ChatChannel(Address owner, String name, ChatChannelMetadata metadata) {
@@ -73,5 +79,30 @@ public class ChatChannel implements Serializable {
     @Override
     public String toString() {
         return "ChatChannel{" + "owner=" + owner + ", name=" + name + ", members=" + members + ", metadata=" + metadata + '}';
+    }
+
+    private void writeObject(ObjectOutputStream out)
+            throws IOException {
+        out.defaultWriteObject();
+        ByteArrayDataOutputStream dos = new ByteArrayDataOutputStream();
+        Util.writeObject(owner, dos);
+        byte[] buffer =dos.buffer();
+        out.writeInt(buffer.length);
+        out.write(buffer);
+        out.writeObject(name);
+        out.writeObject(members);
+        out.writeObject(metadata);
+    }
+
+    private void readObject(ObjectInputStream in)
+            throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        int len = in.readInt();
+        byte[] buffer = new byte[len];
+        in.read(buffer);
+        owner = (Address)Util.readObject(new ByteArrayDataInputStream(buffer));
+        name = (String)in.readObject();
+        members = (Map<String, Member>)in.readObject();
+        metadata = (ChatChannelMetadata)in.readObject();
     }
 }

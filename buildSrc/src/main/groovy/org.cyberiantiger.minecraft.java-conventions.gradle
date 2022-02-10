@@ -33,7 +33,7 @@ repositories {
 }
 
 group = 'org.cyberiantiger.minecraft'
-version = '1.13.5-SNAPSHOT'
+version = '1.13.6-SNAPSHOT'
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 publishing {

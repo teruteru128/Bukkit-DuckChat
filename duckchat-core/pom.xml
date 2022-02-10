@@ -5,13 +5,13 @@
   <parent>
     <groupId>org.cyberiantiger.minecraft</groupId>
     <artifactId>duckchat-parent</artifactId>
-    <version>1.13.4-SNAPSHOT</version>
+    <version>1.13.6-SNAPSHOT</version>
   </parent>
   <dependencies>
     <dependency>
       <groupId>org.jgroups</groupId>
       <artifactId>jgroups</artifactId>
-      <version>4.2.18.Final</version>
+      <version>4.2.20.Final</version>
     </dependency>
     <dependency>
       <groupId>com.google.guava</groupId>

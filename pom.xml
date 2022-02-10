@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.cyberiantiger.minecraft</groupId>
   <artifactId>duckchat-parent</artifactId>
-  <version>1.14.0-ALPHA</version>
+  <version>1.14.1-ALPHA</version>
   <packaging>pom</packaging>
   <modules>
     <module>duckchat-core</module>

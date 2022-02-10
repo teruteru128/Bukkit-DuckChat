@@ -60,7 +60,7 @@ public class Member implements Serializable {
     private void writeObject(ObjectOutputStream out)
             throws IOException {
         ByteArrayDataOutputStream dos = new ByteArrayDataOutputStream();
-        Util.writeObject(address, dos);
+        Util.writeAddress(address, dos);
         byte[] buffer =dos.buffer();
         out.writeInt(buffer.length);
         out.write(buffer);
@@ -75,7 +75,7 @@ public class Member implements Serializable {
 
         byte[] buffer = new byte[len];
         in.read(buffer);
-        address = (Address)Util.readObject(new ByteArrayDataInputStream(buffer));
+        address = Util.readAddress(new ByteArrayDataInputStream(buffer));
         identifier = (String)in.readObject();
         name = (String)in.readObject();
         flags = (BitSet)in.readObject();

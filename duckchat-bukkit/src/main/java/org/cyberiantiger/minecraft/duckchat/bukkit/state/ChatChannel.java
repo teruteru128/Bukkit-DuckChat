@@ -84,7 +84,7 @@ public class ChatChannel implements Serializable {
     private void writeObject(ObjectOutputStream out)
             throws IOException {
         ByteArrayDataOutputStream dos = new ByteArrayDataOutputStream();
-        Util.writeObject(owner, dos);
+        Util.writeAddress(owner, dos);
         byte[] buffer =dos.buffer();
         out.writeInt(buffer.length);
         out.write(buffer);
@@ -98,7 +98,7 @@ public class ChatChannel implements Serializable {
         int len = in.readInt();
         byte[] buffer = new byte[len];
         in.read(buffer);
-        owner = (Address)Util.readObject(new ByteArrayDataInputStream(buffer));
+        owner = Util.readAddress(new ByteArrayDataInputStream(buffer));
         name = (String)in.readObject();
         members = (Map<String, Member>)in.readObject();
         metadata = (ChatChannelMetadata)in.readObject();

@@ -158,8 +158,8 @@ public class StateManager {
                 String name = Util.objectFromStream(dataIn);
                 remoteServers.put(address, name);
             }
-            List<Member> memberList = (List<Member>) Util.objectFromStream(dataIn);
-            List<ChatChannel> channelList = (List<ChatChannel>) Util.objectFromStream(dataIn);
+            List<Member> memberList = Util.objectFromStream(dataIn);
+            List<ChatChannel> channelList = Util.objectFromStream(dataIn);
             servers.putAll(remoteServers);
             for (Map.Entry<Address, String> e : servers.entrySet()) {
                 serversByName.put(e.getValue(), e.getKey());

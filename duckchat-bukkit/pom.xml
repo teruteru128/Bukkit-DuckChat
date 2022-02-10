@@ -62,7 +62,7 @@
     <dependency>
       <groupId>org.jgroups</groupId>
       <artifactId>jgroups</artifactId>
-      <version>4.2.20.Final</version>
+      <version>5.2.0.Final</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>

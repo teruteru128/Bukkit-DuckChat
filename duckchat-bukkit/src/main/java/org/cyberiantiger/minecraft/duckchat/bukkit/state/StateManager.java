@@ -151,7 +151,13 @@ public class StateManager {
         DataInputStream dataIn = new DataInputStream(in);
         List<Runnable> actions = new ArrayList<Runnable>();
         synchronized (LOCK) {
-            Map<Address,String> remoteServers = (Map<Address,String>) Util.objectFromStream(dataIn);
+            Map<Address,String> remoteServers = new HashMap<>();
+            int serversSize = dataIn.readInt();
+            for (int i = 0; i < serversSize; i++) {
+                Address address = Util.readAddress(dataIn);
+                String name = Util.objectFromStream(dataIn);
+                remoteServers.put(address, name);
+            }
             List<Member> memberList = (List<Member>) Util.objectFromStream(dataIn);
             List<ChatChannel> channelList = (List<ChatChannel>) Util.objectFromStream(dataIn);
             servers.putAll(remoteServers);
@@ -186,7 +192,12 @@ public class StateManager {
             List<ChatChannel> channelList = new ArrayList<ChatChannel>(channels.size());
             memberList.addAll(members.values());
             channelList.addAll(channels.values());
-            Util.objectToStream(servers, dataOut);
+            int serversSize = servers.size();
+            dataOut.writeInt(serversSize);
+            for (Map.Entry<Address, String> serverEntry : servers.entrySet()) {
+                Util.writeAddress(serverEntry.getKey(), dataOut);
+                Util.objectToStream(serverEntry.getValue(), dataOut);
+            }
             Util.objectToStream(memberList, dataOut);
             Util.objectToStream(channelList, dataOut);
         }

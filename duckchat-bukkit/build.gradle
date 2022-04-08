@@ -9,7 +9,7 @@ plugins {
 }
 
 dependencies {
-    implementation 'org.jgroups:jgroups:4.2.20.Final'
+    implementation 'org.jgroups:jgroups:4.2.21.Final'
     compileOnly 'org.spigotmc:spigot-api:1.9-R0.1-SNAPSHOT'
     compileOnly 'net.milkbowl.vault:Vault:1.7.3'
     compileOnly project(':duckchat-core')

@@ -67,6 +67,7 @@ import org.cyberiantiger.minecraft.duckchat.bukkit.state.ChatChannelMetadata;
 import org.cyberiantiger.minecraft.duckchat.bukkit.state.StateManager;
 import org.jgroups.Address;
 import org.jgroups.JChannel;
+import org.jgroups.protocols.TP;
 import org.jgroups.util.NameCache;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.CustomClassLoaderConstructor;
@@ -146,7 +147,9 @@ public class Main extends JavaPlugin implements Listener {
         }
         // This is very spammy and leaves the diagnostics thread spinning after
         // a channel.close();
-        channel.getProtocolStack().getTransport().disableDiagnostics();
+        TP transport = channel.getProtocolStack().getTransport();
+        transport.disableDiagnostics();
+        transport.setLogDiscardMessages(config.isLogDiscardMessages());
         channel.setReceiver(new DuckReceiver(getState()));
         channel.connect(config.getClusterName());
         getState().setLocalAddress(channel.getAddress());

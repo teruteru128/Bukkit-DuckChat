@@ -35,6 +35,9 @@ notifyPlayerJoin: true
 # Notify players about players leaving
 notifyPlayerLeave: true
 
+# Logging warnings about messages from different groups
+logDiscardMessages: false
+
 # Shortcuts for accessing channels.
 # Include a space in the shortcut if you wish it to require a space.
 shortcuts:

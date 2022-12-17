@@ -22,6 +22,7 @@ public class Config {
     private boolean notifyServerLeave = true;
     private boolean notifyPlayerJoin = true;
     private boolean notifyPlayerLeave = true;
+    private boolean logDiscardMessages = false;
     private String bindAddress = "127.0.0.1";
     private Map<String,String> shortcuts = null;
     private Map<String,ChannelConfig> channels = null;
@@ -78,4 +79,9 @@ public class Config {
     public boolean isNotifyPlayerLeave() {
         return notifyPlayerLeave;
     }
+
+    public boolean isLogDiscardMessages() {
+        return logDiscardMessages;
+    }
+
 }

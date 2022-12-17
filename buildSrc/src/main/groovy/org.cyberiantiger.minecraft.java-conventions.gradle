@@ -33,7 +33,7 @@ repositories {
 }
 
 group = 'org.cyberiantiger.minecraft'
-version = '1.14.1-ALPHA'
+version = '1.14.2-ALPHA'
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 publishing {

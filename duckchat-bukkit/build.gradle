@@ -4,7 +4,7 @@
 
 plugins {
     // To generate a fat jar, you need to run './gradlew shadowJar' or './gradlew duckchat-bukkit:shadowJar' .
-    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
     id 'org.cyberiantiger.minecraft.java-conventions'
 }
 

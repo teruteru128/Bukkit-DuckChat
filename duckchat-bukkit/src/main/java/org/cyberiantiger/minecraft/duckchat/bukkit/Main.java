@@ -7,6 +7,8 @@ package org.cyberiantiger.minecraft.duckchat.bukkit;
 import com.google.common.base.Charsets;
 import com.google.common.io.ByteStreams;
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+
 import org.cyberiantiger.minecraft.duckchat.bukkit.state.DuckReceiver;
 import org.cyberiantiger.minecraft.duckchat.bukkit.state.ChatChannel;
 import org.cyberiantiger.minecraft.duckchat.bukkit.message.ChannelMessageData;
@@ -69,6 +71,7 @@ import org.jgroups.Address;
 import org.jgroups.JChannel;
 import org.jgroups.protocols.TP;
 import org.jgroups.util.NameCache;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.CustomClassLoaderConstructor;
 import org.yaml.snakeyaml.error.YAMLException;
@@ -236,10 +239,11 @@ public class Main extends JavaPlugin implements Listener {
     private void loadConfig() {
         config = new Config();
         try {
-            Yaml configLoader = new Yaml(new CustomClassLoaderConstructor(Config.class, getClass().getClassLoader()));
+            Yaml configLoader = new Yaml(new CustomClassLoaderConstructor(Config.class, getClass().getClassLoader(), new LoaderOptions()));
             configLoader.setBeanAccess(BeanAccess.FIELD);
-            config = configLoader.loadAs(Files.newBufferedReader(getConfigFile().toPath(), Charsets.UTF_8),
-                    Config.class);
+            try(BufferedReader reader = Files.newBufferedReader(getConfigFile().toPath(), Charsets.UTF_8)) {
+                config = configLoader.loadAs(reader, Config.class);
+            }
         } catch (IOException | YAMLException ex) {
             getLogger().log(Level.SEVERE, "Error loading config.yml", ex);
             getLogger().severe("Your config.yml has fatal errors, using defaults.");

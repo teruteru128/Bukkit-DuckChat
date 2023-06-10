@@ -236,26 +236,25 @@ public class Main extends JavaPlugin implements Listener {
 
     private void loadConfig() {
         config = new Config();
-        try {
-            Yaml configLoader = new Yaml(new CustomClassLoaderConstructor(Config.class, getClass().getClassLoader()));
+        try (BufferedReader reader = Files.newBufferedReader(getConfigFile().toPath(), Charsets.UTF_8)) {
+            Yaml configLoader = new Yaml(
+                    new CustomClassLoaderConstructor(Config.class, getClass().getClassLoader(), new LoaderOptions()));
             configLoader.setBeanAccess(BeanAccess.FIELD);
-            config = configLoader.loadAs(Files.newBufferedReader(getConfigFile().toPath(), Charsets.UTF_8),
-                    Config.class);
+            config = configLoader.loadAs(reader, Config.class);
         } catch (IOException | YAMLException ex) {
             getLogger().log(Level.SEVERE, "Error loading config.yml", ex);
             getLogger().severe("Your config.yml has fatal errors, using defaults.");
         }
         this.messages.clear();
-        try {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+                new BufferedInputStream(getClass().getClassLoader().getResourceAsStream(LANGUAGE)), Charsets.UTF_8))) {
             Yaml languageLoader = new Yaml();
-            Map<String, String> messages = (Map<String, String>) languageLoader.load(new InputStreamReader(
-                    new BufferedInputStream(getClass().getClassLoader().getResourceAsStream(LANGUAGE)),
-                    Charsets.UTF_8));
+            Map<String, String> messages = (Map<String, String>) languageLoader.load(reader);
             for (Map.Entry<String, String> e : messages.entrySet()) {
                 this.messages.put(e.getKey(), e.getValue().replace('&', ChatColor.COLOR_CHAR));
             }
             this.messages.putAll(messages);
-        } catch (YAMLException ex) {
+        } catch (IOException | YAMLException ex) {
             getLogger().log(Level.SEVERE, "Error loading default language.yml", ex);
         }
         try {

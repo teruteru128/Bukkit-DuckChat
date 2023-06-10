@@ -7,6 +7,8 @@ package org.cyberiantiger.minecraft.duckchat.bukkit;
 import com.google.common.base.Charsets;
 import com.google.common.io.ByteStreams;
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+
 import org.cyberiantiger.minecraft.duckchat.bukkit.state.DuckReceiver;
 import org.cyberiantiger.minecraft.duckchat.bukkit.state.ChatChannel;
 import org.cyberiantiger.minecraft.duckchat.bukkit.message.ChannelMessageData;
@@ -69,6 +71,7 @@ import org.jgroups.Address;
 import org.jgroups.JChannel;
 import org.jgroups.protocols.TP;
 import org.jgroups.util.NameCache;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.CustomClassLoaderConstructor;
 import org.yaml.snakeyaml.error.YAMLException;
@@ -90,15 +93,14 @@ public class Main extends JavaPlugin implements Listener {
     private Config config;
     private JChannel channel;
     /*
-    private String clusterName;
-    private boolean useUUIDs;
-    private boolean registerPermissions;
-    private String defaultChannel;
-    */
-
+     * private String clusterName;
+     * private boolean useUUIDs;
+     * private boolean registerPermissions;
+     * private String defaultChannel;
+     */
 
     // Messages.
-    private final Map<String,String> messages = new HashMap<String,String>();
+    private final Map<String, String> messages = new HashMap<String, String>();
 
     public CommandSenderManager getCommandSenderManager() {
         return commandSenderManager;
@@ -120,7 +122,7 @@ public class Main extends JavaPlugin implements Listener {
         return config.getDefaultChannel();
     }
 
-    public Map<String,String> getShortcuts() {
+    public Map<String, String> getShortcuts() {
         return config.getShortcuts();
     }
 

@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.cyberiantiger.minecraft</groupId>
     <artifactId>duckchat-parent</artifactId>
-    <version>1.14-ALPHA</version>
+    <version>1.14.1-ALPHA</version>
   </parent>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

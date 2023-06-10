@@ -99,9 +99,8 @@ public class Main extends JavaPlugin implements Listener {
     private String defaultChannel;
     */
 
-
     // Messages.
-    private final Map<String,String> messages = new HashMap<String,String>();
+    private final Map<String, String> messages = new HashMap<String, String>();
 
     public CommandSenderManager getCommandSenderManager() {
         return commandSenderManager;
@@ -123,7 +122,7 @@ public class Main extends JavaPlugin implements Listener {
         return config.getDefaultChannel();
     }
 
-    public Map<String,String> getShortcuts() {
+    public Map<String, String> getShortcuts() {
         return config.getShortcuts();
     }
 
